@@ -8,4 +8,10 @@
 
 # Generated files
 /styled-system/
-.agents/
+
+# Agent files (except AGENTS.md)
+/.agents/*
+!/.agents/AGENTS.md
+
+# Playwright MCP outputs
+.playwright-mcp/
