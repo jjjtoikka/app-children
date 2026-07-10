@@ -1,0 +1,8 @@
+{
+  "$schema": "https://park-ui.com/schema.json",
+  "framework": "react",
+  "importAliases": {
+    "ui": "~/components/ui",
+    "lib": "~/lib"
+  }
+}

@@ -1,8 +1,80 @@
 import type { Route } from "./+types/home";
 import { Button } from "~/components/ui";
-import { Card } from "~/components/ui";
 import { motion } from "framer-motion";
-import { Sparkles, Star, Heart, Play } from "lucide-react";
+import { Sparkles, Play } from "lucide-react";
+import { css } from "styled-system/css";
+import { styled } from "styled-system/jsx";
+
+const Section = styled("section", {
+  base: { px: "6", py: "16" },
+});
+
+const Title = styled("h1", {
+  base: {
+    fontFamily: "display",
+    fontSize: "5xl",
+    fontWeight: "bold",
+    lineHeight: "tight",
+    color: "colorPalette.500",
+    marginBottom: "6",
+  },
+});
+
+const Subtitle = styled("p", {
+  base: {
+    fontSize: "lg",
+    color: "gray.500",
+    maxW: "600px",
+    margin: "0 auto 8",
+    lineHeight: "relaxed",
+  },
+});
+
+const FeatureCard = styled("div", {
+  base: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    p: "6",
+    bg: "white",
+    borderRadius: "xl",
+    borderWidth: "2px",
+    borderColor: "gray.200",
+    boxShadow: "md",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    _hover: {
+      boxShadow: "xl",
+      transform: "translateY(-2px)",
+    },
+  },
+});
+
+const FeatureIcon = styled("div", {
+  base: {
+    fontSize: "4xl",
+    marginBottom: "4",
+  },
+});
+
+const FeatureTitle = styled("h3", {
+  base: {
+    fontFamily: "display",
+    fontSize: "xl",
+    fontWeight: "semibold",
+    color: "gray.800",
+    marginBottom: "2",
+  },
+});
+
+const FeatureDesc = styled("p", {
+  base: {
+    fontSize: "sm",
+    color: "gray.500",
+    lineHeight: "relaxed",
+  },
+});
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,87 +85,86 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-white">
-      <section className="relative overflow-hidden px-6 py-20 text-center">
+    <div
+      className={css({
+        minH: "100vh",
+        bg: "gray.50",
+      })}
+    >
+      <Section
+        style={{
+          paddingTop: "5rem",
+          paddingBottom: "5rem",
+          textAlign: "center",
+        }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-          className="mx-auto max-w-4xl"
+          className={css({ mx: "auto", maxW: "4xl" })}
         >
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-            className="mb-6 inline-block text-6xl"
+            className={css({ fontSize: "6xl", mb: "6", display: "inline-block" })}
           >
             🌟
           </motion.div>
 
-          <h1
-            style={{
-              fontFamily: "Fredoka, Nunito, sans-serif",
-              fontSize: "3.75rem",
-              fontWeight: 700,
-              lineHeight: 1.1,
-              color: "#f97316",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Welcome to Fun Learning!
-          </h1>
+          <Title colorPalette="orange">Welcome to Fun Learning!</Title>
 
-          <p
-            style={{
-              fontSize: "1.25rem",
-              color: "#6b7280",
-              maxWidth: "600px",
-              margin: "0 auto 2rem",
-              lineHeight: 1.6,
-            }}
-          >
+          <Subtitle>
             Explore, play, and learn with our interactive activities designed
             just for you!
-          </p>
+          </Subtitle>
 
           <motion.div
-            className="flex flex-wrap items-center justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
+            className={css({
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4",
+            })}
           >
-            <Button size="lg" shape="pill" style={{ fontSize: "1.125rem" }}>
+            <Button size="lg" colorPalette="orange">
               <Play style={{ width: "1.25rem", height: "1.25rem" }} />
               Start Playing
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              shape="pill"
-              style={{ fontSize: "1.125rem" }}
-            >
+            <Button variant="outline" size="lg" colorPalette="orange">
               <Sparkles style={{ width: "1.25rem", height: "1.25rem" }} />
               Explore Activities
             </Button>
           </motion.div>
         </motion.div>
-      </section>
+      </Section>
 
-      <section className="px-6 py-16">
-        <div className="mx-auto max-w-6xl">
+      <Section>
+        <div className={css({ mx: "auto", maxW: "6xl" })}>
           <h2
-            style={{
-              fontFamily: "Fredoka, Nunito, sans-serif",
-              fontSize: "2.25rem",
-              fontWeight: 700,
+            className={css({
+              fontFamily: "display",
+              fontSize: "4xl",
+              fontWeight: "bold",
               textAlign: "center",
-              color: "#374151",
-              marginBottom: "3rem",
-            }}
+              color: "gray.800",
+              marginBottom: "12",
+            })}
           >
             Fun Activities
           </h2>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            className={css({
+              display: "grid",
+              gap: "8",
+              gridTemplateColumns: ["1fr", "repeat(2, 1fr)", "repeat(3, 1fr)"],
+            })}
+          >
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -105,53 +176,35 @@ export default function Home() {
                   ease: [0.34, 1.56, 0.64, 1],
                 }}
               >
-                <Card
-                  variant="outlined"
-                  size="lg"
-                  style={{
-                    alignItems: "center",
-                    textAlign: "center",
-                    cursor: "pointer",
-                  }}
-                >
+                <FeatureCard>
                   <motion.div
-                    className="mb-4 text-5xl"
                     whileHover={{ scale: 1.2 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    {feature.icon}
+                    <FeatureIcon>{feature.icon}</FeatureIcon>
                   </motion.div>
-                  <h3
-                    style={{
-                      fontFamily: "Fredoka, Nunito, sans-serif",
-                      fontSize: "1.5rem",
-                      fontWeight: 600,
-                      color: "#374151",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p style={{ color: "#6b7280", lineHeight: 1.6 }}>
-                    {feature.description}
-                  </p>
-                </Card>
+                  <FeatureTitle>{feature.title}</FeatureTitle>
+                  <FeatureDesc>{feature.description}</FeatureDesc>
+                </FeatureCard>
               </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section
-        className="px-6 py-16"
-        style={{ backgroundColor: "#fff7ed" }}
-      >
-        <div className="mx-auto max-w-4xl text-center">
+      <Section className={css({ bg: "orange.50", textAlign: "center" })}>
+        <div className={css({ mx: "auto", maxW: "4xl" })}>
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex flex-wrap items-center justify-center gap-8"
+            className={css({
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8",
+            })}
           >
             {stats.map((stat, index) => (
               <motion.div
@@ -164,78 +217,61 @@ export default function Home() {
                   duration: 0.5,
                   ease: [0.34, 1.56, 0.64, 1],
                 }}
-                className="text-center"
+                className={css({ textAlign: "center" })}
               >
                 <div
-                  style={{
-                    fontFamily: "Fredoka, Nunito, sans-serif",
-                    fontSize: "3rem",
-                    fontWeight: 700,
-                    color: "#f97316",
-                  }}
+                  className={css({
+                    fontFamily: "display",
+                    fontSize: "4xl",
+                    fontWeight: "bold",
+                    color: "orange.500",
+                  })}
                 >
                   {stat.value}
                 </div>
-                <div
-                  style={{
-                    fontSize: "1rem",
-                    color: "#6b7280",
-                    fontWeight: 500,
-                  }}
-                >
+                <div className={css({ fontSize: "md", color: "gray.500", fontWeight: "medium" })}>
                   {stat.label}
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
-      </section>
+      </Section>
 
-      <section className="px-6 py-20 text-center">
+      <Section className={css({ textAlign: "center", py: "20" })}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto max-w-2xl"
+          className={css({ mx: "auto", maxW: "2xl" })}
         >
           <h2
-            style={{
-              fontFamily: "Fredoka, Nunito, sans-serif",
-              fontSize: "2.25rem",
-              fontWeight: 700,
-              color: "#374151",
-              marginBottom: "1.5rem",
-            }}
+            className={css({
+              fontFamily: "display",
+              fontSize: "4xl",
+              fontWeight: "bold",
+              color: "gray.800",
+              marginBottom: "6",
+            })}
           >
             Ready to Start?
           </h2>
           <p
-            style={{
-              fontSize: "1.125rem",
-              color: "#6b7280",
-              marginBottom: "2rem",
-              lineHeight: 1.6,
-            }}
+            className={css({
+              fontSize: "lg",
+              color: "gray.500",
+              marginBottom: "8",
+              lineHeight: "relaxed",
+            })}
           >
             Join thousands of happy kids already learning and having fun!
           </p>
-          <Button
-            size="xl"
-            shape="pill"
-            style={{ fontSize: "1.25rem", gap: "0.75rem" }}
-          >
-            <Heart
-              style={{
-                width: "1.5rem",
-                height: "1.5rem",
-                fill: "currentColor",
-              }}
-            />
+          <Button size="xl" colorPalette="orange">
             Get Started Now
           </Button>
         </motion.div>
-      </section>
+      </Section>
     </div>
   );
 }
