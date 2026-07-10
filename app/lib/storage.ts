@@ -23,8 +23,12 @@ const createDefaultSchedules = (): DailySchedule[] => {
   return days;
 };
 
+const isBrowser = () => typeof window !== "undefined" && typeof localStorage !== "undefined";
+
 export const storage = {
   getSchedules(): DailySchedule[] {
+    if (!isBrowser()) return createDefaultSchedules();
+
     try {
       const data = localStorage.getItem(STORAGE_KEYS.schedules);
       if (data) {
@@ -38,10 +42,13 @@ export const storage = {
   },
 
   saveSchedules(schedules: DailySchedule[]) {
+    if (!isBrowser()) return;
     localStorage.setItem(STORAGE_KEYS.schedules, JSON.stringify(schedules));
   },
 
   getSettings(): AppSettings {
+    if (!isBrowser()) return { ...DEFAULT_SETTINGS };
+
     try {
       const data = localStorage.getItem(STORAGE_KEYS.settings);
       if (data) {
@@ -53,10 +60,12 @@ export const storage = {
   },
 
   saveSettings(settings: AppSettings) {
+    if (!isBrowser()) return;
     localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
   },
 
   reset() {
+    if (!isBrowser()) return;
     localStorage.removeItem(STORAGE_KEYS.schedules);
     localStorage.removeItem(STORAGE_KEYS.settings);
   },
