@@ -13,7 +13,13 @@ export function minutesToTime(minutes: number): string {
 
 export function getCurrentTimeString(): string {
   const now = new Date();
-  return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  const helsinkiTime = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Helsinki",
+  }).format(now);
+  return helsinkiTime;
 }
 
 export function getActivityStatus(

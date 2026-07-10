@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Pencil } from "lucide-react";
 import { css } from "styled-system/css";
 import { flex } from "styled-system/patterns";
 import { styled } from "styled-system/jsx";
 import { Button } from "~/components/ui";
 import { useApp } from "~/context/AppContext";
-import { DAY_NAMES } from "~/types";
+import { DAY_NAMES, type Activity } from "~/types";
 import { sortActivitiesByTime } from "~/lib/time";
+import { ActivityForm } from "./ActivityForm";
 
 const Header = styled("header", {
   base: {
@@ -24,9 +26,11 @@ const Header = styled("header", {
 
 export function DayEditor() {
   const { dayOfWeek } = useParams();
-  const { schedules, deleteActivity, copyDaySchedule, addActivity } = useApp();
+  const { schedules, deleteActivity, copyDaySchedule, addActivity, updateActivity } = useApp();
   const day = parseInt(dayOfWeek || "0", 10);
   const schedule = schedules.find((s) => s.dayOfWeek === day);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
 
   if (!schedule) {
     return (
@@ -38,6 +42,26 @@ export function DayEditor() {
   }
 
   const sortedActivities = sortActivitiesByTime(schedule.activities);
+
+  const handleAdd = () => {
+    setEditingActivity(null);
+    setIsFormOpen(true);
+  };
+
+  const handleEdit = (activity: Activity) => {
+    setEditingActivity(activity);
+    setIsFormOpen(true);
+  };
+
+  const handleSave = (activity: Activity) => {
+    if (editingActivity) {
+      updateActivity(day, editingActivity.id, activity);
+    } else {
+      addActivity(day, activity);
+    }
+    setIsFormOpen(false);
+    setEditingActivity(null);
+  };
 
   return (
     <div className={flex({ direction: "column", minH: "100vh", bg: "gray.50", gap: 0 })}>
@@ -90,6 +114,7 @@ export function DayEditor() {
             size="lg"
             colorPalette="orange"
             className={css({ mb: "4" })}
+            onClick={handleAdd}
           >
             <Plus style={{ width: "20px", height: "20px" }} />
             Add Activity
@@ -119,6 +144,7 @@ export function DayEditor() {
                   borderRadius: "xl",
                   borderWidth: "2px",
                   borderColor: "gray.200",
+                  _hover: { borderColor: "gray.300" },
                 })}
               >
                 <div
@@ -143,21 +169,57 @@ export function DayEditor() {
                     {activity.startTime} - {activity.endTime}
                   </div>
                 </div>
-                <button
-                  onClick={() => deleteActivity(day, activity.id)}
-                  className={css({
-                    color: "gray.400",
-                    _hover: { color: "red.500" },
-                    cursor: "pointer",
-                  })}
-                >
-                  ✕
-                </button>
+                <div className={flex({ gap: "1", align: "center" })}>
+                  <button
+                    onClick={() => handleEdit(activity)}
+                    className={css({
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "full",
+                      color: "gray.400",
+                      cursor: "pointer",
+                      _hover: { bg: "gray.100", color: "gray.600" },
+                    })}
+                    aria-label="Edit activity"
+                  >
+                    <Pencil style={{ width: "16px", height: "16px" }} />
+                  </button>
+                  <button
+                    onClick={() => deleteActivity(day, activity.id)}
+                    className={css({
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "full",
+                      color: "gray.400",
+                      cursor: "pointer",
+                      _hover: { bg: "red.50", color: "red.500" },
+                    })}
+                    aria-label="Delete activity"
+                  >
+                    <span className={css({ fontSize: "lg" })}>✕</span>
+                  </button>
+                </div>
               </div>
             ))
           )}
         </div>
       </main>
+
+      <ActivityForm
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingActivity(null);
+        }}
+        onSave={handleSave}
+        initialActivity={editingActivity || undefined}
+      />
     </div>
   );
 }
